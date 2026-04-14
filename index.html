@@ -5,130 +5,294 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gaming Leaderboard System</title>
   <style>
-    * { box-sizing: border-box; }
-    body {
+    * {
+      box-sizing: border-box;
       margin: 0;
+      padding: 0;
+    }
+
+    body {
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #0f172a, #1e293b);
-      color: #f8fafc;
       min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(168, 85, 247, 0.35), transparent 30%),
+        radial-gradient(circle at top right, rgba(59, 130, 246, 0.35), transparent 30%),
+        radial-gradient(circle at bottom center, rgba(34, 197, 94, 0.18), transparent 30%),
+        linear-gradient(135deg, #0b1020, #111827, #1f2937);
+      color: #f8fafc;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
+      padding: 24px;
     }
+
     .container {
       width: 100%;
-      max-width: 900px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(8px);
-      border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      max-width: 980px;
+      padding: 30px;
+      border-radius: 24px;
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 0 30px rgba(59, 130, 246, 0.18), 0 0 70px rgba(168, 85, 247, 0.12);
+      backdrop-filter: blur(12px);
     }
+
+    .header {
+      text-align: center;
+      margin-bottom: 26px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #7dd3fc;
+      font-size: 14px;
+      margin-bottom: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
     h1 {
-      text-align: center;
-      margin-top: 0;
-      margin-bottom: 8px;
+      font-size: 42px;
+      margin-bottom: 10px;
+      text-shadow: 0 0 15px rgba(59, 130, 246, 0.35);
     }
-    p.subtitle {
-      text-align: center;
+
+    .subtitle {
       color: #cbd5e1;
-      margin-top: 0;
-      margin-bottom: 24px;
+      font-size: 17px;
+      line-height: 1.6;
     }
-    .form {
+
+    .panel {
       display: grid;
       grid-template-columns: 1fr 1fr auto;
-      gap: 12px;
-      margin-bottom: 20px;
+      gap: 14px;
+      margin-bottom: 18px;
     }
+
     input {
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      outline: none;
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.08);
+      color: white;
       font-size: 16px;
+      outline: none;
+      transition: 0.25s;
     }
+
+    input::placeholder {
+      color: #94a3b8;
+    }
+
+    input:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+    }
+
     button {
-      padding: 12px 18px;
       border: none;
-      border-radius: 10px;
-      background: #38bdf8;
-      color: #082f49;
+      border-radius: 14px;
+      padding: 14px 18px;
+      font-size: 15px;
       font-weight: bold;
       cursor: pointer;
-      font-size: 15px;
+      transition: transform 0.18s, box-shadow 0.18s, opacity 0.18s;
     }
-    button:hover { background: #7dd3fc; }
+
+    button:hover {
+      transform: translateY(-2px);
+      opacity: 0.96;
+    }
+
+    .primary {
+      background: linear-gradient(135deg, #38bdf8, #6366f1);
+      color: white;
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.28);
+    }
+
+    .secondary {
+      background: linear-gradient(135deg, #a855f7, #ec4899);
+      color: white;
+      box-shadow: 0 8px 20px rgba(168, 85, 247, 0.28);
+    }
+
+    .danger {
+      background: linear-gradient(135deg, #ef4444, #f97316);
+      color: white;
+      box-shadow: 0 8px 20px rgba(239, 68, 68, 0.24);
+    }
+
     .actions {
       display: flex;
-      gap: 10px;
+      gap: 12px;
       flex-wrap: wrap;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
-    .danger {
-      background: #f87171;
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .card-title {
+      color: #94a3b8;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .card-value {
+      font-size: 28px;
+      font-weight: bold;
       color: white;
     }
-    .danger:hover {
-      background: #ef4444;
+
+    .table-wrap {
+      overflow: hidden;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255,255,255,0.05);
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      overflow: hidden;
-      border-radius: 12px;
+    }
+
+    th, td {
+      padding: 16px;
+      text-align: center;
+    }
+
+    th {
+      background: rgba(99, 102, 241, 0.18);
+      color: #e0e7ff;
+      font-size: 15px;
+      letter-spacing: 0.4px;
+    }
+
+    tr {
+      transition: background 0.2s;
+    }
+
+    tbody tr:hover {
       background: rgba(255,255,255,0.06);
     }
-    th, td {
-      padding: 14px;
-      text-align: center;
+
+    tbody tr:not(:last-child) td {
       border-bottom: 1px solid rgba(255,255,255,0.08);
     }
-    th {
-      background: rgba(56, 189, 248, 0.18);
-    }
-    .top-player {
-      margin-top: 18px;
-      padding: 14px;
-      border-radius: 12px;
-      background: rgba(34, 197, 94, 0.15);
-      color: #dcfce7;
+
+    .rank-badge {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
       font-weight: bold;
-      text-align: center;
+      background: linear-gradient(135deg, #facc15, #f59e0b);
+      color: #111827;
     }
+
+    .top-player {
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 18px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: #fef9c3;
+      background: linear-gradient(135deg, rgba(250, 204, 21, 0.16), rgba(249, 115, 22, 0.12));
+      border: 1px solid rgba(250, 204, 21, 0.25);
+      box-shadow: 0 0 24px rgba(250, 204, 21, 0.08);
+    }
+
     .empty {
       text-align: center;
+      padding: 30px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.05);
       color: #cbd5e1;
-      padding: 20px;
-      background: rgba(255,255,255,0.04);
-      border-radius: 12px;
+      border: 1px dashed rgba(255,255,255,0.12);
+      font-size: 17px;
     }
-    @media (max-width: 700px) {
-      .form {
+
+    @media (max-width: 760px) {
+      h1 {
+        font-size: 30px;
+      }
+
+      .panel {
         grid-template-columns: 1fr;
       }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+
       button {
         width: 100%;
+      }
+
+      th, td {
+        padding: 12px 8px;
+        font-size: 14px;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Gaming Leaderboard System</h1>
-    <p class="subtitle">Display player rankings based on scores using sorting</p>
+    <div class="header">
+      <div class="badge">Live Web Project</div>
+      <h1>Gaming Leaderboard System</h1>
+      <p class="subtitle">Add players, sort scores, and show rankings in a stylish live leaderboard.</p>
+    </div>
 
-    <div class="form">
+    <div class="panel">
       <input type="text" id="playerName" placeholder="Enter player name" />
       <input type="number" id="playerScore" placeholder="Enter player score" />
-      <button onclick="addPlayer()">Add Player</button>
+      <button class="primary" onclick="addPlayer()">Add Player</button>
     </div>
 
     <div class="actions">
-      <button onclick="sortLeaderboard()">Sort Leaderboard</button>
+      <button class="secondary" onclick="sortLeaderboard()">Sort Leaderboard</button>
       <button class="danger" onclick="clearLeaderboard()">Clear All</button>
+    </div>
+
+    <div class="stats">
+      <div class="card">
+        <div class="card-title">Total Players</div>
+        <div class="card-value" id="totalPlayers">0</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Highest Score</div>
+        <div class="card-value" id="highestScore">0</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Leaderboard Status</div>
+        <div class="card-value" id="statusText">Ready</div>
+      </div>
     </div>
 
     <div id="leaderboardArea"></div>
@@ -152,6 +316,8 @@
       players.push({ name, score });
       nameInput.value = '';
       scoreInput.value = '';
+
+      updateStats('Updated');
       renderLeaderboard();
     }
 
@@ -165,50 +331,76 @@
           }
         }
       }
+
+      updateStats('Sorted');
       renderLeaderboard();
     }
 
     function clearLeaderboard() {
       players = [];
+      updateStats('Cleared');
       renderLeaderboard();
+    }
+
+    function updateStats(status) {
+      document.getElementById('totalPlayers').textContent = players.length;
+
+      let highest = 0;
+      if (players.length > 0) {
+        highest = players[0].score;
+        for (let i = 1; i < players.length; i++) {
+          if (players[i].score > highest) {
+            highest = players[i].score;
+          }
+        }
+      }
+
+      document.getElementById('highestScore').textContent = highest;
+      document.getElementById('statusText').textContent = status;
     }
 
     function renderLeaderboard() {
       const area = document.getElementById('leaderboardArea');
 
       if (players.length === 0) {
-        area.innerHTML = '<div class="empty">No players added yet.</div>';
+        area.innerHTML = '<div class="empty">No players added yet. Start by entering a player name and score.</div>';
         return;
       }
 
       let html = `
-        <table>
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Player Name</th>
-              <th>Score</th>
-            </tr>
-          </thead>
-          <tbody>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Player Name</th>
+                <th>Score</th>
+              </tr>
+            </thead>
+            <tbody>
       `;
 
       for (let i = 0; i < players.length; i++) {
         html += `
           <tr>
-            <td>${i + 1}</td>
+            <td><span class="rank-badge">${i + 1}</span></td>
             <td>${players[i].name}</td>
             <td>${players[i].score}</td>
           </tr>
         `;
       }
 
-      html += `</tbody></table>`;
-      html += `<div class="top-player">Top Player: ${players[0].name} with score ${players[0].score}</div>`;
+      html += `
+            </tbody>
+          </table>
+        </div>
+      `;
 
+      html += `<div class="top-player">🏆 Top Player: ${players[0].name} with score ${players[0].score}</div>`;
       area.innerHTML = html;
     }
 
+    updateStats('Ready');
     renderLeaderboard();
   </script>
 </body>
