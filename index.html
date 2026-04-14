@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gaming Leaderboard System</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .container {
+      width: 100%;
+      max-width: 900px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(8px);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    h1 {
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+    p.subtitle {
+      text-align: center;
+      color: #cbd5e1;
+      margin-top: 0;
+      margin-bottom: 24px;
+    }
+    .form {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    input {
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      outline: none;
+      font-size: 16px;
+    }
+    button {
+      padding: 12px 18px;
+      border: none;
+      border-radius: 10px;
+      background: #38bdf8;
+      color: #082f49;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    button:hover { background: #7dd3fc; }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .danger {
+      background: #f87171;
+      color: white;
+    }
+    .danger:hover {
+      background: #ef4444;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+    }
+    th, td {
+      padding: 14px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    th {
+      background: rgba(56, 189, 248, 0.18);
+    }
+    .top-player {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 12px;
+      background: rgba(34, 197, 94, 0.15);
+      color: #dcfce7;
+      font-weight: bold;
+      text-align: center;
+    }
+    .empty {
+      text-align: center;
+      color: #cbd5e1;
+      padding: 20px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 12px;
+    }
+    @media (max-width: 700px) {
+      .form {
+        grid-template-columns: 1fr;
+      }
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Gaming Leaderboard System</h1>
+    <p class="subtitle">Display player rankings based on scores using sorting</p>
+
+    <div class="form">
+      <input type="text" id="playerName" placeholder="Enter player name" />
+      <input type="number" id="playerScore" placeholder="Enter player score" />
+      <button onclick="addPlayer()">Add Player</button>
+    </div>
+
+    <div class="actions">
+      <button onclick="sortLeaderboard()">Sort Leaderboard</button>
+      <button class="danger" onclick="clearLeaderboard()">Clear All</button>
+    </div>
+
+    <div id="leaderboardArea"></div>
+  </div>
+
+  <script>
+    let players = [];
+
+    function addPlayer() {
+      const nameInput = document.getElementById('playerName');
+      const scoreInput = document.getElementById('playerScore');
+
+      const name = nameInput.value.trim();
+      const score = parseInt(scoreInput.value);
+
+      if (name === '' || isNaN(score)) {
+        alert('Please enter both player name and score.');
+        return;
+      }
+
+      players.push({ name, score });
+      nameInput.value = '';
+      scoreInput.value = '';
+      renderLeaderboard();
+    }
+
+    function sortLeaderboard() {
+      for (let i = 0; i < players.length - 1; i++) {
+        for (let j = 0; j < players.length - i - 1; j++) {
+          if (players[j].score < players[j + 1].score) {
+            const temp = players[j];
+            players[j] = players[j + 1];
+            players[j + 1] = temp;
+          }
+        }
+      }
+      renderLeaderboard();
+    }
+
+    function clearLeaderboard() {
+      players = [];
+      renderLeaderboard();
+    }
+
+    function renderLeaderboard() {
+      const area = document.getElementById('leaderboardArea');
+
+      if (players.length === 0) {
+        area.innerHTML = '<div class="empty">No players added yet.</div>';
+        return;
+      }
+
+      let html = `
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Player Name</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      for (let i = 0; i < players.length; i++) {
+        html += `
+          <tr>
+            <td>${i + 1}</td>
+            <td>${players[i].name}</td>
+            <td>${players[i].score}</td>
+          </tr>
+        `;
+      }
+
+      html += `</tbody></table>`;
+      html += `<div class="top-player">Top Player: ${players[0].name} with score ${players[0].score}</div>`;
+
+      area.innerHTML = html;
+    }
+
+    renderLeaderboard();
+  </script>
+</body>
+</html>
